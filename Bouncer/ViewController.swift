@@ -28,6 +28,19 @@ class ViewController: UIViewController {
             bouncer.addBlock(redBlock!)
         }
         
+        let motionManager = AppDelegate.Motion.Manager
+        if motionManager.accelerometerAvailable {
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.mainQueue()){ (data, error) -> Void in
+                self.bouncer.gravity.gravityDirection = CGVector(dx: data!.acceleration.x, dy: -data!.acceleration.y)
+            }
+            
+        }
+        
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        AppDelegate.Motion.Manager.stopAccelerometerUpdates()
     }
     
     struct Constants {
