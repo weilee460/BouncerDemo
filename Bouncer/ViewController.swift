@@ -9,17 +9,38 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    let bouncer = BouncerBehavior()
+    lazy var animator: UIDynamicAnimator = { UIDynamicAnimator(referenceView: self.view) }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        animator.addBehavior(bouncer)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    var redBlock: UIView?
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if redBlock == nil {
+            redBlock = addBlock()
+            redBlock?.backgroundColor = UIColor.redColor()
+            bouncer.addBlock(redBlock!)
+        }
+        
     }
-
+    
+    struct Constants {
+        static let BlockSize = CGSize(width: 40, height: 40)
+    }
+    
+    func addBlock() -> UIView
+    {
+        let block = UIView(frame: CGRect(origin: CGPoint.zero, size: Constants.BlockSize))
+        block.center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+        view.addSubview(block)
+        return block
+    }
 
 }
 
